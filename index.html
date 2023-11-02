@@ -7,47 +7,47 @@
 <body>
     <button id="signMessageButton">Sign Message</button>
     <button id="getAddress">GET ADDRESS</button>
-    <script>
-        document.getElementById("getAddress").addEventListener("click", async function() {
-            alert(window.ethereum.selectedAddress)
+<script>
+    document.getElementById("getAddress").addEventListener("click", async function() {
+        alert(window.ethereum.selectedAddress)
+    });
+
+    document.getElementById("signMessageButton").addEventListener("click", async function() {
+        // 检查是否存在 window.ethereum
+        if (typeof window.ethereum === "undefined") {
+            alert("Trust Wallet (window.ethereum) not detected.");
+            return;
         }
-        
-        document.getElementById("signMessageButton").addEventListener("click", async function() {
-            // 检查是否存在 window.ethereum
-            if (typeof window.ethereum === "undefined") {
-                alert("Trust Wallet (window.ethereum) not detected.");
-                return;
-            }
 
-            try {
-                // 要签名的消息
-                const messageToSign = "Hello, Trust Wallet!";
+        try {
+            // 要签名的消息
+            const messageToSign = "Hello, Trust Wallet!";
 
-                // 创建一个消息对象
-                const message = {
-                    message: messageToSign,
-                    // 此处可以添加其他自定义字段
-                };
+            // 创建一个消息对象
+            const message = {
+                message: messageToSign,
+                // 此处可以添加其他自定义字段
+            };
 
-                // 请求用户签名消息
-                const signature = await window.ethereum.request({
-                    method: "personal_signTrx",
-                    params: [
-                        JSON.stringify(message), // 消息对象转为字符串
-                        window.ethereum.selectedAddress, // 用户的以太坊地址
-                    ],
-                });
+            // 请求用户签名消息
+            const signature = await window.ethereum.request({
+                method: "personal_signTrx",
+                params: [
+                    JSON.stringify(message), // 消息对象转为字符串
+                    window.ethereum.selectedAddress, // 用户的以太坊地址
+                ],
+            });
 
-                // 处理签名结果
-                alert("Message Signature: " + signature);
+            // 处理签名结果
+            alert("Message Signature: " + signature);
 
-                // 将签名结果发送到服务器以进行验证，或执行其他必要的操作
+            // 将签名结果发送到服务器以进行验证，或执行其他必要的操作
 
-            } catch (error) {
-                console.error("Error during message signing:", error);
-                alert("Error during message signing: " + error.message);
-            }
-        });
-    </script>
+        } catch (error) {
+            console.error("Error during message signing:", error);
+            alert("Error during message signing: " + error.message);
+        }
+    });
+</script>
 </body>
 </html>
