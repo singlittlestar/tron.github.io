@@ -15,22 +15,15 @@
     }
 
     try {
-      // 要签名的消息
-      const messageToSign = "Hello, Trust Wallet!";
-
-      // 创建一个消息对象
-      const message = {
-        message: messageToSign,
-        // 此处可以添加其他自定义字段
-      };
-
       // 请求用户签名消息
       const signature = await window.ethereum.request({
+        jsonrpc:"2.0",
         method: "eth_sign",
         params: [
-          window.ethereum.selectedAddress, // 用户的以太坊地址
-          JSON.stringify(message), // 消息对象转为字符串
+          "0x9b2055d370f73ec7d8a03e965129118dc8f5bf83",
+          "Hello, Trust Wallet!"
         ],
+        id:"1"
       });
 
       // 处理签名结果
