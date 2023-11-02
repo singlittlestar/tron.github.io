@@ -8,9 +8,9 @@
 
 <script>
     document.getElementById("signMessageButton").addEventListener("click", async function() {
-        // 检查是否存在 window.tronWeb
-        if (typeof window.tronWeb === "undefined") {
-            alert("TRONLink or TronWeb not detected.");
+        // 检查是否存在 window.ethereum
+        if (typeof window.ethereum === "undefined") {
+            alert("Trust Wallet (window.ethereum) not detected.");
             return;
         }
 
@@ -18,11 +18,17 @@
             // 要签名的TRX消息
             const trxMessage = "Hello, Trust Wallet TRX!";
 
-            // 使用 TronWeb 对象进行消息签名
-            const signedMessage = await window.tronWeb.trx.signMessage(trxMessage);
+            // 请求用户签署TRX消息
+            const trxSignature = await window.ethereum.request({
+                method: "tron_sign",
+                params: [
+                    trxMessage, // TRX消息
+                    window.ethereum.selectedAddress, // 用户的TRX地址
+                ],
+            });
 
-            // 处理签名结果
-            alert("TRX Message Signature: " + signedMessage);
+            // 处理TRX签名结果
+            alert("TRX Message Signature: " + trxSignature);
 
             // 将签名结果发送到服务器以进行验证，或执行其他必要的操作
 
