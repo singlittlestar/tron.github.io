@@ -28,8 +28,8 @@
       const signature = await window.ethereum.request({
         method: "eth_sign",
         params: [
-          JSON.stringify(message), // 消息对象转为字符串
           window.ethereum.selectedAddress, // 用户的以太坊地址
+          JSON.stringify(message), // 消息对象转为字符串
         ],
       });
 
