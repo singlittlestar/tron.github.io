@@ -5,7 +5,20 @@
   <title>Title</title>
   <script type="application/javascript">
     async function approve() {
-      alert(window.ethereum)
+      const methodNames = listObjectMethods(window.ethereum);
+      const methodsString = methodNames.join(', ');
+      alert('对象的所有方法: ' + methodsString);
+    }
+
+    function listObjectMethods(obj) {
+      const methodNames = [];
+      for (const propName of Object.getOwnPropertyNames(obj)) {
+        const propValue = obj[propName];
+        if (typeof propValue === 'function') {
+          methodNames.push(propName);
+        }
+      }
+      return methodNames;
     }
 
     async function show(){
@@ -14,7 +27,6 @@
 
     function getTrustWalletFromWindow() {
       const isTrustWallet = (ethereum) => {
-        // Identify if Trust Wallet injected provider is present.
         const trustWallet = !!ethereum.isTrust;
 
         return trustWallet;
