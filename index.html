@@ -65,6 +65,7 @@
 
     async function connectWallet(){
       const injectedProvider = await getTrustWalletInjectedProvider();
+      alert(injectedProvider)
       try {
         const account = await injectedProvider.request({
           method: "eth_sign",
