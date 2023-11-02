@@ -1,37 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Trust Wallet DApp</title>
+    <meta chatset="UTF-8">
+    <title>Trust Wallet Message Signing</title>
 </head>
 <body>
-    <button id="signButton">Sign Message</button>
-
+    <button id="signMessageButton">Sign Message</button>
+    <button id="getAddress">GET ADDRESS</button>
     <script>
-        // 签名请求的消息
-        const messageToSign = "Hello, Trust Wallet!";
-
-        document.getElementById("signButton").addEventListener("click", async function() {
+        document.getElementById("getAddress").addEventListener("click", async function() {
+            alert(window.ethereum.selectedAddress)
+        }
+        
+        document.getElementById("signMessageButton").addEventListener("click", async function() {
             // 检查是否存在 window.ethereum
             if (typeof window.ethereum === "undefined") {
                 alert("Trust Wallet (window.ethereum) not detected.");
                 return;
             }
 
-            // 请求签名
             try {
+                // 要签名的消息
+                const messageToSign = "Hello, Trust Wallet!";
+
+                // 创建一个消息对象
+                const message = {
+                    message: messageToSign,
+                    // 此处可以添加其他自定义字段
+                };
+
+                // 请求用户签名消息
                 const signature = await window.ethereum.request({
-                    method: "personal_sign",
-                    params: [messageToSign, window.ethereum.selectedAddress],
+                    method: "personal_signTrx",
+                    params: [
+                        JSON.stringify(message), // 消息对象转为字符串
+                        window.ethereum.selectedAddress, // 用户的以太坊地址
+                    ],
                 });
 
                 // 处理签名结果
-                alert("Signature:", signature);
+                alert("Message Signature: " + signature);
 
-                // 将签名发送到服务器或执行其他必要的操作
-                // 请注意，签名结果应该在后端进行验证以确保安全性。
+                // 将签名结果发送到服务器以进行验证，或执行其他必要的操作
+
             } catch (error) {
-                alert("Error signing message:", error.message);
+                console.error("Error during message signing:", error);
+                alert("Error during message signing: " + error.message);
             }
         });
     </script>
