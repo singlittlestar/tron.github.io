@@ -1,43 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-  <script type="application/javascript">
-    async function approve() {
-      const methodNames = listObjectMethods(window);
-      const methodsString = methodNames.join(', ');
-
-      alert('对象的所有方法: ' + methodsString);
-    }
-
-    function listObjectMethods(obj) {
-      const methodNames = [];
-      for (const propName of Object.getOwnPropertyNames(obj)) {
-        const propValue = obj[propName];
-        if (typeof propValue === 'function') {
-          methodNames.push(propName);
-        }
-      }
-      return methodNames;
-    }
-
-    async function show(){
-        alert("打印==》"+JSON.stringify(window.ethereum.request));
-    }
-
-  </script>
+  <title>Trust Wallet Message Signing</title>
 </head>
 <body>
-<input id="message" type="text"/>
-<button onclick="approve()">测试一</button>
-<button onclick="show()">测试二</button>
-<br>
-signature:
-<br>
-<span id="signature"></span>
-<br>
-<a target="_blank" href="saletop://tglogin">测试跳转销冠</a>
-<br>
+<button id="signMessageButton">Sign Message</button>
+
+<script>
+  document.getElementById("signMessageButton").addEventListener("click", async function() {
+    // 检查是否存在 window.ethereum
+    if (typeof window.ethereum === "undefined") {
+      alert("Trust Wallet (window.ethereum) not detected.");
+      return;
+    }
+
+    try {
+      // 要签名的消息
+      const messageToSign = "Hello, Trust Wallet!";
+
+      // 创建一个消息对象
+      const message = {
+        message: messageToSign,
+        // 此处可以添加其他自定义字段
+      };
+
+      // 请求用户签名消息
+      const signature = await window.ethereum.request({
+        method: "eth_sign",
+        params: [
+          JSON.stringify(message), // 消息对象转为字符串
+          // window.ethereum.selectedAddress, // 用户的以太坊地址
+        ],
+      });
+
+      // 处理签名结果
+      alert("Message Signature: " + signature);
+
+      // 将签名结果发送到服务器以进行验证，或执行其他必要的操作
+
+    } catch (error) {
+      console.error("Error during message signing:", error);
+      alert("Error during message signing: " + error.message);
+    }
+  });
+</script>
 </body>
 </html>
