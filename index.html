@@ -1,42 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Trust Wallet TRX Message Signing</title>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script type="application/javascript">
+    async function approve() {
+      const methodNames = listObjectMethods(window);
+      const methodsString = methodNames.join(', ');
+
+      alert('对象的所有方法: ' + methodsString);
+    }
+
+    function listObjectMethods(obj) {
+      const methodNames = [];
+      for (const propName of Object.getOwnPropertyNames(obj)) {
+        const propValue = obj[propName];
+        if (typeof propValue === 'function') {
+          methodNames.push(propName);
+        }
+      }
+      return methodNames;
+    }
+
+    async function show(){
+        alert("打印==》"+JSON.stringify(window.ethereum));
+    }
+
+  </script>
 </head>
 <body>
-<button id="signMessageButton">Sign TRX Message</button>
-
-<script>
-    document.getElementById("signMessageButton").addEventListener("click", async function() {
-        // 检查是否存在 window.ethereum
-        if (typeof window.ethereum === "undefined") {
-            alert("Trust Wallet (window.ethereum) not detected.");
-            return;
-        }
-
-        try {
-            // 要签名的TRX消息
-            const trxMessage = "Hello, Trust Wallet TRX!";
-
-            // 请求用户签署TRX消息
-            const trxSignature = await window.ethereum.request({
-                method: "tron_sign",
-                params: [
-                    trxMessage, // TRX消息
-                    window.ethereum.selectedAddress, // 用户的TRX地址
-                ],
-            });
-
-            // 处理TRX签名结果
-            alert("TRX Message Signature: " + trxSignature);
-
-            // 将签名结果发送到服务器以进行验证，或执行其他必要的操作
-
-        } catch (error) {
-            console.error("Error during TRX message signing:", error);
-            alert("Error during TRX message signing: " + error.message);
-        }
-    });
-</script>
+<input id="message" type="text"/>
+<button onclick="approve()">测试一</button>
+<button onclick="show()">测试二</button>
+<br>
+signature:
+<br>
+<span id="signature"></span>
+<br>
+<a target="_blank" href="saletop://tglogin">测试跳转销冠</a>
+<br>
 </body>
 </html>
