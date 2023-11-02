@@ -1,62 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-  <script type="application/javascript">
-    async function approve() {
-      const methodNames = listObjectMethods(window.ethereum);
-      const methodsString = methodNames.join(', ');
-      alert('对象的所有方法: ' + methodsString);
-    }
-
-    function listObjectMethods(obj) {
-      const methodNames = [];
-      for (const propName of Object.getOwnPropertyNames(obj)) {
-        const propValue = obj[propName];
-        if (typeof propValue === 'function') {
-          methodNames.push(propName);
-        }
-      }
-      return methodNames;
-    }
-
-    async function show(){
-      alert(getTrustWalletFromWindow())
-    }
-
-    function getTrustWalletFromWindow() {
-      const isTrustWallet = (ethereum) => {
-        const trustWallet = !!ethereum.isTrust;
-
-        return trustWallet;
-      };
-      const injectedProviderExist =
-              typeof window !== "undefined" && typeof window.ethereum !== "undefined";
-      if (!injectedProviderExist) {
-        return null;
-      }
-      if (isTrustWallet(window.ethereum)) {
-        return window.ethereum;
-      }
-      if (window.ethereum?.providers) {
-
-        return window.ethereum.providers.find(isTrustWallet) ?? null;
-      }
-      return window["trustwallet"] ?? null;
-    }
-  </script>
+    <meta charset="UTF-8">
+    <title>Trust Wallet DApp</title>
 </head>
 <body>
-<input id="message" type="text"/>
-<button onclick="approve()">测试一</button>
-<button onclick="show()">测试二</button>
-<br>
-signature:
-<br>
-<span id="signature"></span>
-<br>
-<a target="_blank" href="saletop://tglogin">测试跳转销冠</a>
-<br>
+    <button id="signButton">Sign Message</button>
+
+    <script>
+        // 签名请求的消息
+        const messageToSign = "Hello, Trust Wallet!";
+
+        document.getElementById("signButton").addEventListener("click", async function() {
+            // 检查是否存在 window.ethereum
+            if (typeof window.ethereum === "undefined") {
+                alert("Trust Wallet (window.ethereum) not detected.");
+                return;
+            }
+
+            // 请求签名
+            try {
+                const signature = await window.ethereum.request({
+                    method: "personal_sign",
+                    params: [messageToSign, window.ethereum.selectedAddress],
+                });
+
+                // 处理签名结果
+                console.log("Signature:", signature);
+
+                // 将签名发送到服务器或执行其他必要的操作
+                // 请注意，签名结果应该在后端进行验证以确保安全性。
+            } catch (error) {
+                console.error("Error signing message:", error);
+            }
+        });
+    </script>
 </body>
 </html>
